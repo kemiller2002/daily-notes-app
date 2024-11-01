@@ -1,0 +1,159 @@
+body {
+  margin: 1em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+header {
+  background-color: #5b7cdd;
+  box-shadow: 3px 3px 3px darkgray;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0.2em;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 3px 3px 3px darkgray;
+  margin-top: 0.25em;
+  border: thin darkblue solid;
+  padding: 1em;
+}
+
+section ~ section {
+  margin-top: 1em;
+}
+
+section > h2 {
+  text-align: center;
+}
+
+.note {
+  padding: 0.75em;
+}
+
+.note-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.note-container > * {
+  width: 100%;
+}
+
+.note-container > * ~ * {
+  margin-top: 0.25em !important;
+}
+
+.note-text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+div.followup {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+div.followup > * ~ * {
+  margin-left: 1em;
+}
+
+label.followup {
+  align-content: center;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container > * {
+  margin-top: 0.25em !important;
+}
+
+.login-container > h2 {
+  margin: 1em;
+}
+
+.container {
+  margin: 4em;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+  gap: 0.2em;
+}
+
+.createCategory > .title {
+  text-align: center;
+}
+
+div.category {
+  display: flex;
+  flex-direction: row;
+}
+
+div.category > * ~ * {
+  margin-left: 0.2em;
+}
+
+div.category > .id::after {
+  content: ".";
+}
+
+div.category {
+  flex-direction: row;
+  align-items: center;
+}
+
+div.category > .enabled {
+  text-align: right;
+}
+
+div.category > .label {
+  flex-grow: 2;
+}
+
+div.main {
+  display: flex;
+  flex-direction: row;
+}
+div.leftMain,
+div.rightMain {
+  flex-grow: 1;
+}
+
+div.centerMain {
+  flex-grow: 2;
+}
+
+textarea {
+  border: thin solid lightgray;
+  border-radius: 4px;
+}
+
+.note-container > .title {
+  width: 100%;
+}
+
+header > h3 {
+  flex-grow: 2;
+  margin-left: 3em;
+}
