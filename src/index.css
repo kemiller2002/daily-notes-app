@@ -31,6 +31,10 @@ section {
   padding: 1em;
 }
 
+menu {
+  margin-right: 1em;
+}
+
 section ~ section {
   margin-top: 1em;
 }
@@ -156,4 +160,53 @@ textarea {
 header > h3 {
   flex-grow: 2;
   margin-left: 3em;
+}
+
+div.menuItems {
+  display: flex;
+  flex-direction: column;
+}
+
+header > div {
+  display: flex;
+  align-items: center;
+}
+
+.showMenu {
+  display: none;
+}
+
+menu {
+  align-items: center;
+}
+
+@media (max-width: 899px) {
+  i.menu {
+    display: flex;
+    align-items: center;
+    font-size: x-large;
+  }
+
+  .showMenu:not(:checked) ~ .menuItems {
+    display: none;
+  }
+
+  .showMenu:checked ~ .menuItems {
+    position: fixed;
+    z-index: 1000;
+    background-color: darkblue;
+    margin-top: 0.5em;
+    right: 2em;
+  }
+}
+
+@media (min-width: 900px) {
+  i.menu {
+    display: none;
+  }
+  div.menuItems {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 }

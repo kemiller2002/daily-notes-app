@@ -4,22 +4,13 @@ import { TextField } from "@mui/material";
 import { useState } from "react";
 
 export function LoginDisplay({ localDatastore }) {
-  const [repo, updateRepo] = useState(
-    localDatastore.getItem("repo").value || ""
-  );
-  const [username, updateUsername] = useState(
-    localDatastore.getItem("username").value || ""
-  );
-  const [email, updateEmail] = useState(
-    localDatastore.getItem("email").value || ""
-  );
-  const [token, updatePat] = useState(
-    localDatastore.getItem("pat").value || ""
-  );
-
   const handler = {
     get(target, prop, receiver) {
-      return target[prop] || localDatastore.getItem(prop).value || "";
+      if (typeof prop === "string" && !target[prop]) {
+        target[prop] = localDatastore.getItem(prop).value || "";
+      }
+
+      return target[prop];
     },
   };
 
@@ -27,10 +18,17 @@ export function LoginDisplay({ localDatastore }) {
 
   const [storedData, update] = useState(state);
 
+  function updateState(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    update({ ...storedData, [name]: value });
+  }
+
   function saveItems(e) {
     e.preventDefault();
-    state.keys
-      .map((key) => ({ key, value: state[key] }))
+    Object.keys(storedData)
+      .map((key) => ({ key, value: storedData[key] }))
       .forEach(localDatastore.setItem);
   }
 
@@ -42,39 +40,45 @@ export function LoginDisplay({ localDatastore }) {
         <form onSubmit={saveItems}>
           <TextField
             id="username"
-            value={username}
+            name="username"
+            value={storedData.username}
             label="User Name"
-            onChange={(e) => updateUsername(e.target.value)}
+            onChange={updateState}
           />
           <TextField
             id="name"
-            value={username}
+            name="name"
+            value={storedData.name}
             label="Name"
-            onChange={(e) => updateUsername(e.target.value)}
+            onChange={updateState}
           />{" "}
           <TextField
             id="owner"
-            value={state.owner}
+            name="owner"
+            value={storedData.owner}
             label="Owner"
-            onChange={(e) => updateUsername(e.target.value)}
+            onChange={updateState}
           />
           <TextField
             id="repo"
-            value={repo}
+            name="repo"
+            value={storedData.repo}
             label="Github Repo"
-            onChange={(e) => updateRepo(e.target.value)}
+            onChange={updateState}
           />
           <TextField
             id="email"
-            value={email}
+            name="email"
+            value={storedData.email}
             label="Email"
-            onChange={(e) => updateEmail(e.target.value)}
+            onChange={updateState}
           />
           <TextField
             id="pat"
-            value={token}
+            name="pat"
+            value={storedData.token}
             label="Personal Access Token"
-            onChange={(e) => updatePat(e.target.value)}
+            onChange={updateState}
           />
           <Button type="submit">Save</Button>
         </form>
