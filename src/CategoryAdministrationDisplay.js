@@ -10,7 +10,7 @@ const label = { inputProps: { "aria-label": "Toggle category enabled" } };
 
 function createCategoryEntryDisplay(administrator, notify, category) {
   return (
-    <div className="category">
+    <div className="category" key={`category-container-${category.id}`}>
       <span className="id">{category.id}</span>
       <span className="label">{category.label}</span>
       <Switch
@@ -73,7 +73,7 @@ export default function CategoryAdministrationDisplay({
   return (
     <div>
       <h1>Category Administration</h1>
-      <hl />
+
       <section className="category">
         <h2>Current Categories</h2>
         {categories.map((x) =>

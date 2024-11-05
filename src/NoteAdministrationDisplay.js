@@ -11,7 +11,6 @@ import { reducer, createRailReducerFunction } from "./Reducer";
 function administrateNote(noteAdministrator, clearFields, notify, note) {
   const failure = () => {
     notify("An error occurred creating note.  Please try again.");
-    console.log(...arguments);
   };
 
   const railSystem = createRailReducerFunction(failure);
@@ -25,8 +24,6 @@ function administrateNote(noteAdministrator, clearFields, notify, note) {
     () => clearFields(),
     () => notify("Note created"),
   ].reduce(railSystem, note);
-
-  console.log(railSystem.errors);
 
   return results;
 }
@@ -66,7 +63,6 @@ function NoteAdministrationDisplay({
   }
 
   const changeInput = (event, newInputValue, reason) => {
-    console.log(reason);
     if (reason === "reset") {
       //setValue("");
       return;

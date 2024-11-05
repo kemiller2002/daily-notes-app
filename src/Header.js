@@ -1,44 +1,47 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
+import { subscribe, unsubscribe } from "./Events";
 
-export default function Header() {
+export default function Header({ globalClickEventName }) {
+  const [displayMenu, updateDisplayMenu] = useState(false);
+
+  useEffect(() => {
+    subscribe(globalClickEventName, () => {
+      updateDisplayMenu(false);
+    });
+    return () => {
+      unsubscribe(globalClickEventName);
+    };
+  }, []);
+
   return (
     <header>
-      <h3>Note Today Mr. Bond</h3>
+      <h3>
+        <span>Note Today Mr. Bond</span>
+      </h3>
 
       <menu>
-        <label for="showMenu">
-          <i class="fa fa-bars menu"></i>
+        <label htmlFor="showMenu">
+          <i className="fa fa-bars menu"></i>
         </label>
         <input
           type="checkbox"
           name="showMenu"
           id="showMenu"
           className="showMenu"
+          checked={displayMenu == true}
+          onChange={(e) => {
+            updateDisplayMenu(e.target.checked);
+            //e.stopPropagation();
+          }}
         />
         <div className="menuItems">
-          <Button color="inherit" as={Link} to="/">
-            Dashboard
-          </Button>
-          <Button color="inherit" as={Link}>
-            Follow Up
-          </Button>
-          <Button color="inherit" as={Link} to="/categories">
-            Categories
-          </Button>
-          <Button color="inherit" as={Link}>
-            Administration
-          </Button>
-          <Button color="inherit" as={Link} to="/login">
-            Login
-          </Button>
+          <Link to="/">Dashboard</Link>
+          <Link to="/follow-up">Follow Up</Link>
+          <Link to="/categories">Categories</Link>
+          <Link to="administration">Administration</Link>
+          <Link to="/login">Login</Link>
         </div>
       </menu>
     </header>

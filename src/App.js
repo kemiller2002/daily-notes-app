@@ -15,6 +15,8 @@ import CategoryAdministration from "./CategoryAdministration";
 import NoteAdministration from "./NoteAdministration";
 import { CircleNotificationsOutlined } from "@mui/icons-material";
 
+import { publish } from "./Events";
+
 function App() {
   const localDatastore = new LocalDatastore();
 
@@ -28,10 +30,16 @@ function App() {
     console.log(message);
   };
 
+  const emitClick = () => {
+    publish("globalClick");
+  };
+
   return (
-    <>
-      {" "}
-      <Header localDatastore={localDatastore} />
+    <div onClick={emitClick}>
+      <Header
+        localDatastore={localDatastore}
+        globalClickEventName={"globalClick"}
+      />
       <div className="main">
         <div className="leftMain"></div>
         <div className="centerMain">
@@ -71,7 +79,7 @@ function App() {
         <div className="rightMain"></div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
 

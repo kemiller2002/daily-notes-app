@@ -37,7 +37,7 @@ export function LoginDisplay({ localDatastore }) {
       <h1>Credentials</h1>
       <section>
         <h2>Repo Access</h2>
-        <form onSubmit={saveItems}>
+        <form onSubmit={saveItems} className="login">
           <TextField
             id="username"
             name="username"

@@ -18,8 +18,6 @@ export default function Communicator(localStorage) {
     return false;
   }
 
-  console.log(repoAccess);
-
   const octokit = (token) =>
     new Octokit({
       auth: token,

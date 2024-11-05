@@ -20,6 +20,7 @@ header {
   flex-direction: row;
   flex-wrap: wrap;
   margin: 0.2em;
+  padding: 0em 2em;
 }
 
 section {
@@ -29,10 +30,6 @@ section {
   margin-top: 0.25em;
   border: thin darkblue solid;
   padding: 1em;
-}
-
-menu {
-  margin-right: 1em;
 }
 
 section ~ section {
@@ -159,7 +156,9 @@ textarea {
 
 header > h3 {
   flex-grow: 2;
-  margin-left: 3em;
+  margin: 0;
+  display: flex;
+  align-items: center;
 }
 
 div.menuItems {
@@ -178,6 +177,14 @@ header > div {
 
 menu {
   align-items: center;
+  margin: 0;
+}
+
+div.menuItems > a {
+  color: white;
+  margin: 0.5em;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 @media (max-width: 899px) {
@@ -185,6 +192,8 @@ menu {
     display: flex;
     align-items: center;
     font-size: x-large;
+    margin: 6px 0px;
+    cursor: pointer;
   }
 
   .showMenu:not(:checked) ~ .menuItems {
@@ -194,8 +203,11 @@ menu {
   .showMenu:checked ~ .menuItems {
     position: fixed;
     z-index: 1000;
-    background-color: darkblue;
-    margin-top: 0.5em;
+    background-color: #5b7cdd;
+    border: thin solid darkgray;
+    box-shadow: 3px 3px 3px darkgray;
+
+    margin-top: -0.3em;
     right: 2em;
   }
 }
@@ -205,8 +217,11 @@ menu {
     display: none;
   }
   div.menuItems {
-    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
   }
+}
+
+form.login > * ~ * {
+  margin-top: 0.5em !important;
 }
