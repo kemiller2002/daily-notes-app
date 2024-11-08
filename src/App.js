@@ -17,6 +17,9 @@ import { CircleNotificationsOutlined } from "@mui/icons-material";
 
 import { publish } from "./Events";
 
+import AdministrationDisplay from "./AdministrationDisplay";
+import FollowUpDisplay from "./FollowUpDisplay";
+
 function App() {
   const localDatastore = new LocalDatastore();
 
@@ -72,6 +75,15 @@ function App() {
                   ></CategoryAdministrationDisplay>
                 }
                 communicator={communicator}
+              ></Route>
+              <Route
+                path="administration"
+                element={<AdministrationDisplay></AdministrationDisplay>}
+              ></Route>
+
+              <Route
+                path="follow-up"
+                element={<FollowUpDisplay></FollowUpDisplay>}
               ></Route>
             </Route>
           </Routes>

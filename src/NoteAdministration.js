@@ -6,6 +6,8 @@ import { LoginTwoTone } from "@mui/icons-material";
 
 const railSystem = createRailReducerFunction(logToConsole);
 
+//adding async here.
+
 const railSystemLogStep = (s, i) => {
   logToConsole(s, i);
   return railSystem(s, i);
@@ -14,10 +16,6 @@ const railSystemLogStep = (s, i) => {
 const separator = "$9@)9&";
 
 export default function NoteAdministration(communicator) {
-  this.createNote = function (note) {
-    return note;
-  };
-
   this.getNotes = function ({ categories, dateRangeStart, dateRangeEnd }) {
     return [];
   };
@@ -34,7 +32,7 @@ export default function NoteAdministration(communicator) {
   }
 
   function calculateFileName(date) {
-    return `${date.getFullYear()}-${getWeekNumber(date)}`;
+    return `${date.getFullYear()}-${getWeekNumber(date)}.txt`;
   }
 
   function decode(file) {
@@ -47,20 +45,23 @@ export default function NoteAdministration(communicator) {
 
   this.createNote = function (note) {
     const entryDate = new Date();
+
     return [
       (x) => ({
         path: calculateFileName(entryDate),
         formattedNote: formatNote(entryDate, x),
       }),
-      (x) => ({
-        file: communicator.getFileOrDefault(x.path),
+      async (x) => ({
+        file: await communicator.getFileOrDefault(x.path),
         ...x,
       }),
-      logToConsole,
       (x) => ({ ...x, sha: x.file.sha, currentContent: x.file.content }),
-      (x) => ({ ...x, decoded: decode(x.file) }),
-      (x) => ({ ...x, content: appendData(x.decoded, x.formattedNote) }),
+      (x) => ({ ...x, decodedContent: x.file.decodedContent }),
+      (x) => ({
+        ...x,
+        updatedContent: appendData(x.decodedContent, x.formattedNote),
+      }),
       communicator.sendData,
-    ].reduce(reducer, note);
+    ].reduce(this.reducer, note);
   };
 }

@@ -1,5 +1,5 @@
 function reducer(s, i) {
-  return i(s);
+  return s instanceof Promise ? s.then(i) : i(s);
 }
 
 function onBoard(data) {

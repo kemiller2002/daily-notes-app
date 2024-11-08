@@ -192,7 +192,7 @@ div.menuItems > a {
     display: flex;
     align-items: center;
     font-size: x-large;
-    margin: 6px 0px;
+    margin: 5px 0px;
     cursor: pointer;
   }
 

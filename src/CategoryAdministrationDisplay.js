@@ -91,6 +91,7 @@ export default function CategoryAdministrationDisplay({
             name="categoryName"
             label="Name"
             onChange={handleInputChange}
+            value={newCategory.name}
           ></TextField>
           <Autocomplete
             multiple

@@ -7,6 +7,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useState, useEffect } from "react";
 import { reducer, createRailReducerFunction } from "./Reducer";
+import { logToConsole } from "./Logging";
 
 function administrateNote(noteAdministrator, clearFields, notify, note) {
   const failure = () => {
@@ -24,6 +25,8 @@ function administrateNote(noteAdministrator, clearFields, notify, note) {
     () => clearFields(),
     () => notify("Note created"),
   ].reduce(railSystem, note);
+
+  console.log(railSystem.success, railSystem.errors);
 
   return results;
 }
@@ -71,24 +74,18 @@ function NoteAdministrationDisplay({
     }
   };
 
+  function submitNote(e) {
+    e.preventDefault();
+    administrateNote(noteAdministrator, clearFields, notify, noteInformation);
+  }
+
   return (
     <div>
       <h1>Note Administration</h1>
 
       <section>
         <h2>Create Note</h2>
-        <form
-          className="note-container"
-          onSubmit={(e) => {
-            administrateNote(
-              noteAdministrator,
-              clearFields,
-              notify,
-              noteInformation
-            );
-            e.preventDefault();
-          }}
-        >
+        <form className="note-container" onSubmit={submitNote} method="post">
           <div className="followup">
             <InputLabel htmlFor="followUpDate">
               Follow Up Date:{" "}
