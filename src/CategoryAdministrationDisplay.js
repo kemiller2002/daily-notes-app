@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -8,22 +8,42 @@ import { reducer, createRailReducerFunction } from "./Reducer";
 
 const label = { inputProps: { "aria-label": "Toggle category enabled" } };
 
-function createCategoryEntryDisplay(administrator, notify, category) {
+function tryCatch(fn) {
+  return function (data) {
+    try {
+      return fn(data);
+    } catch {
+      return null;
+    }
+  };
+}
+
+function createCategoryEntryDisplay(
+  administrator,
+  updateState,
+  notify,
+  category
+) {
+  const change = (e) => {
+    const updatedCategory = {
+      ...category,
+      enabled: e.target.checked,
+    };
+
+    administrator.saveCategory(updatedCategory);
+
+    updateState(updatedCategory);
+  };
+
   return (
     <div className="category" key={`category-container-${category.id}`}>
-      <span className="id">{category.id}</span>
-      <span className="label">{category.label}</span>
+      <span className="label">{category.name}</span>
       <Switch
         key={category.id}
         {...label}
         checked={category.enabled}
         className="enabled"
-        onChange={(e) => {
-          administrator.updateCategory({
-            ...category,
-            enabled: e.target.checked,
-          });
-        }}
+        onChange={change}
       />
     </div>
   );
@@ -40,17 +60,19 @@ const changeInput = (event, newInputValue, reason) => {
   }
 };
 
-function createCategoryEntry(notify, data, e) {
+function createCategoryEntry(
+  categoryAdministrator,
+  notify,
+  loadCategories,
+  data,
+  e
+) {
   e.preventDefault();
 
-  const failure = () => {
-    notify("An error occurred creating note.  Please try again.");
-    console.log(...arguments);
-  };
-
-  const railSystem = createRailReducerFunction(failure);
-
-  return [].reduce(railSystem, data);
+  return categoryAdministrator.saveCategory(data).then((x) => {
+    loadCategories();
+    return x;
+  });
 }
 
 export default function CategoryAdministrationDisplay({
@@ -65,11 +87,26 @@ export default function CategoryAdministrationDisplay({
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-
-    updateNewCategory({ ...newCategory, [name]: value });
+    updateNewCategory({ ...newCategory, [name]: values || value });
   };
 
-  categoryAdministrator.getCategories().then(updateCategoryState);
+  const loadCategories = () => {
+    return categoryAdministrator.getCategories().then(updateCategoryState);
+  };
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const updateSingleCategoryState = (newCategory) => {
+    const newList = categoryAdministrator.makeUniqueCategoryList(
+      categories,
+      newCategory
+    );
+
+    updateCategoryState(newList);
+  };
+
   return (
     <div>
       <h1>Category Administration</h1>
@@ -77,7 +114,12 @@ export default function CategoryAdministrationDisplay({
       <section className="category">
         <h2>Current Categories</h2>
         {categories.map((x) =>
-          createCategoryEntryDisplay(categoryAdministrator, notify, x)
+          createCategoryEntryDisplay(
+            categoryAdministrator,
+            updateSingleCategoryState,
+            notify,
+            x
+          )
         )}
       </section>
       <section>
@@ -85,26 +127,36 @@ export default function CategoryAdministrationDisplay({
 
         <form
           className="createCategory"
-          onSubmit={(e) => createCategoryEntry(notify, newCategory, e)}
+          onSubmit={(e) =>
+            createCategoryEntry(
+              categoryAdministrator,
+              notify,
+              loadCategories,
+              newCategory,
+              e
+            )
+          }
         >
           <TextField
-            name="categoryName"
+            name="name"
             label="Name"
             onChange={handleInputChange}
-            value={newCategory.name}
+            value={newCategory.name || ""}
           ></TextField>
           <Autocomplete
             multiple
             getOptionLabel={(option) => option || option}
             options={categoryTypes}
-            onChange={handleInputChange}
+            onChange={(e, v) => {
+              handleInputChange({ target: { name: "categories" } }, v);
+            }}
             onInputChange={changeInput}
             renderInput={(params) => (
               <TextField {...params} label="Category Types" name="category" />
             )}
             name="selectCategory"
           />
-          <Button>Create</Button>
+          <Button type="submit">Create</Button>
         </form>
       </section>
     </div>

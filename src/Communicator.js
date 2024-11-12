@@ -20,7 +20,7 @@ export default function Communicator(localStorage) {
 
   const octokit = (token) => new Octokit({ auth: token });
 
-  const getFile = (path) => {
+  function getFile(path) {
     const octo = octokit(repoAccess.token);
 
     return octo.rest.repos
@@ -33,8 +33,11 @@ export default function Communicator(localStorage) {
         const content = atob(result.data.content);
 
         return { ...result.data, decodedContent: content };
+      })
+      .catch((x) => {
+        console.log(x);
       });
-  };
+  }
 
   const getData = function (path) {
     const octo = octokit(repoAccess.token);
@@ -47,6 +50,30 @@ export default function Communicator(localStorage) {
     });
   };
 
+  this.sendData = function ({ path, updatedContent, sha }) {
+    const user = {
+      name: repoAccess.name,
+      email: repoAccess.email,
+    };
+
+    const octo = octokit(repoAccess.token);
+
+    return octo.rest.repos.createOrUpdateFileContents({
+      owner: repoAccess.owner,
+      repo: repoAccess.repo,
+      path,
+      message: `Updating of ${path}`,
+      content: btoa(updatedContent),
+      committer: { ...user },
+      author: { ...user },
+      sha,
+    });
+  };
+
+  this.getFileOrDefault = async function (path) {
+    return (await getFile(path)) || {};
+  };
+
   this.testLogin = async function () {
     const octo = octokit(repoAccess.token);
 
@@ -55,33 +82,5 @@ export default function Communicator(localStorage) {
     } = await octo.rest.users.getAuthenticated();
 
     return login;
-  };
-
-  this.sendData = function ({ path, updatedContent, sha }) {
-    const user = {
-      name: repoAccess.name,
-      email: repoAccess.email,
-    };
-
-    console.log("HERE");
-
-    const octo = octokit(repoAccess.token);
-
-    return octo.rest.repos
-      .createOrUpdateFileContents({
-        owner: repoAccess.owner,
-        repo: repoAccess.repo,
-        path,
-        message: `Updating of ${path}`,
-        content: btoa(updatedContent),
-        committer: { ...user },
-        author: { ...user },
-        sha,
-      })
-      .then((x) => console.log(x));
-  };
-
-  this.getFileOrDefault = function (path) {
-    return getFile(path);
   };
 }

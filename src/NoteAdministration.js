@@ -4,16 +4,16 @@ import { getWeekNumber } from "./DateFunctions";
 import { logToConsole } from "./Logging";
 import { LoginTwoTone } from "@mui/icons-material";
 
-const railSystem = createRailReducerFunction(logToConsole);
+import { createNumericalId } from "./Generators";
 
-//adding async here.
+const railSystem = createRailReducerFunction(logToConsole);
 
 const railSystemLogStep = (s, i) => {
   logToConsole(s, i);
   return railSystem(s, i);
 };
 
-const separator = "$9@)9&";
+const separator = "!!=======ENTRY SEPARATOR=======!!";
 
 export default function NoteAdministration(communicator) {
   this.getNotes = function ({ categories, dateRangeStart, dateRangeEnd }) {
@@ -23,10 +23,12 @@ export default function NoteAdministration(communicator) {
   this.reducer = railSystemLogStep;
 
   function formatNote(entryDate, note) {
+    console.log(note);
     return [
+      `id: ${createNumericalId(entryDate)}`,
       `entry date: ${entryDate}`,
       `title: ${note.title}`,
-      `categories: ${note.categories}`,
+      `categoriesJson: ${JSON.stringify(note.categories)}`,
       `${note.note}`,
     ].join("\r\n");
   }
@@ -35,12 +37,8 @@ export default function NoteAdministration(communicator) {
     return `${date.getFullYear()}-${getWeekNumber(date)}.txt`;
   }
 
-  function decode(file) {
-    return btoa(file);
-  }
-
   function appendData(document, data) {
-    return [document, separator, data].join("\r\n");
+    return [document, separator, data].filter(Boolean).join("\r\n");
   }
 
   this.createNote = function (note) {

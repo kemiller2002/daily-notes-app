@@ -40,10 +40,13 @@ function NoteAdministrationDisplay({
   const [categories, updateCategories] = useState([]);
 
   const getCategories = (x) => {
-    categoryAdministrator.getCategories().then(updateCategories);
+    categoryAdministrator
+      .getCategories()
+      .then(logToConsole)
+      .then(updateCategories);
   };
 
-  const blankNote = { followupDate: "" };
+  const blankNote = { followUpDate: "" };
   const [noteInformation, updateNote] = useState(blankNote);
 
   const clearFields = () => {
@@ -58,7 +61,13 @@ function NoteAdministrationDisplay({
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    updateNote({ ...noteInformation, [name]: value });
+
+    updateNote({
+      ...noteInformation,
+      [name]: values
+        ? values.map((v) => (typeof v === "string" ? { label: v } : v))
+        : value,
+    });
   };
 
   function setCurrentValue(target) {
@@ -76,8 +85,11 @@ function NoteAdministrationDisplay({
 
   function submitNote(e) {
     e.preventDefault();
+
     administrateNote(noteAdministrator, clearFields, notify, noteInformation);
   }
+
+  console.log(JSON.stringify(categories));
 
   return (
     <div>
@@ -99,16 +111,19 @@ function NoteAdministrationDisplay({
             </InputLabel>
           </div>
           <Autocomplete
+            key="categorySelect"
             multiple
             freeSolo
             disablePortal
             autoSelect
-            getOptionLabel={(option) => option.label || option}
+            getOptionLabel={(option) => option.name || option}
             options={categories}
-            onChange={handleInputChange}
+            onChange={(e, v) =>
+              handleInputChange({ target: { name: "categories" } }, v)
+            }
             onInputChange={changeInput}
             renderInput={(params) => (
-              <TextField {...params} label="Category" name="category" />
+              <TextField {...params} label="Category" name="categories" />
             )}
             name="selectCategory"
           />

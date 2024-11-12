@@ -1,0 +1,3 @@
+fix categories when creating a note
+notification on note success 
+notification on note failure
