@@ -89,8 +89,6 @@ function NoteAdministrationDisplay({
     administrateNote(noteAdministrator, clearFields, notify, noteInformation);
   }
 
-  console.log(JSON.stringify(categories));
-
   return (
     <div>
       <h1>Note Administration</h1>

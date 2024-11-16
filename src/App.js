@@ -19,6 +19,7 @@ import { publish } from "./Events";
 
 import AdministrationDisplay from "./AdministrationDisplay";
 import FollowUpDisplay from "./FollowUpDisplay";
+import NotesDashboard from "./NotesDashboard";
 
 function App() {
   const localDatastore = new LocalDatastore();
@@ -84,6 +85,14 @@ function App() {
               <Route
                 path="follow-up"
                 element={<FollowUpDisplay></FollowUpDisplay>}
+              ></Route>
+              <Route
+                path="notes"
+                element={
+                  <NotesDashboard
+                    noteAdministrator={noteAdministrator}
+                  ></NotesDashboard>
+                }
               ></Route>
             </Route>
           </Routes>

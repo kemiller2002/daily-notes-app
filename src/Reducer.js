@@ -11,19 +11,10 @@ function onBoard(data) {
 
 function createRailReducerFunction(failureActionMessageHandler) {
   const errors = [];
+  const success = null;
 
   function railSystem(state, currentStep, currentIndex, arr) {
     const currentState = (state || {}).isRail ? state : onBoard(state);
-    const stepArray = arr || [];
-
-    if (currentIndex >= stepArray.length) {
-      const data = currentState.data;
-
-      if (errors.length > 0) {
-        failureActionMessageHandler(...errors);
-      }
-      return data;
-    }
 
     try {
       if (errors.length == 0) {
@@ -33,10 +24,11 @@ function createRailReducerFunction(failureActionMessageHandler) {
           data: reducer(currentState.data, currentStep),
         };
 
-        return results;
+        return currentIndex < arr.length - 1 ? results : results.data;
       }
     } catch (e) {
       errors.push({ message: e.message, stack: e.stack });
+      success = false;
       return {
         ...currentState,
         currentIndex,
@@ -45,7 +37,7 @@ function createRailReducerFunction(failureActionMessageHandler) {
   }
 
   railSystem.errors = errors;
-  railSystem.success = null;
+  railSystem.success = success;
 
   return railSystem;
 }

@@ -1,10 +1,11 @@
 import { createRailReducerFunction, reducer } from "./Reducer";
-import { getWeekNumber } from "./DateFunctions";
 
 import { logToConsole } from "./Logging";
 import { LoginTwoTone } from "@mui/icons-material";
 
 import { createNumericalId } from "./Generators";
+
+import { createNoteStructure, deserializeNote, serializeNote } from "./Note";
 
 const railSystem = createRailReducerFunction(logToConsole);
 
@@ -15,36 +16,52 @@ const railSystemLogStep = (s, i) => {
 
 const separator = "!!=======ENTRY SEPARATOR=======!!";
 
+function formatNote(entryDate, note) {
+  return [
+    (x) => createNoteStructure(x.id, entryDate, x.title, x.categories, x.note),
+    serializeNote,
+  ].reduce(reducer, note);
+}
+
+function calculateFileName(date) {
+  return `${date.getFullYear()}-${date.getMonth()}.txt`;
+}
+
+function appendData(document, data) {
+  return [document, separator, data].filter(Boolean).join("\r\n");
+}
+
+/* Error here */
+function processNotesFile(path) {
+  return [
+    this.communicator.getFileOrDefault,
+    (x) => x.decodedContent,
+    (x) => x.split(separator),
+    (x) => x.map((y) => deserializeNote(y)),
+  ].reduce(this.reducer, path);
+}
+
 export default function NoteAdministration(communicator) {
-  this.getNotes = function ({ categories, dateRangeStart, dateRangeEnd }) {
-    return [];
+  const self = this;
+
+  this.reducer = railSystem;
+
+  const bProcessNotesFile = processNotesFile.bind({
+    communicator,
+    reducer: this.reducer,
+  });
+
+  this.getNotes = function ({ categories, yearsAndMonths }) {
+    const monthFiles = yearsAndMonths.map((x) => calculateFileName(x));
+
+    return monthFiles.map(bProcessNotesFile);
   };
-
-  this.reducer = railSystemLogStep;
-
-  function formatNote(entryDate, note) {
-    console.log(note);
-    return [
-      `id: ${createNumericalId(entryDate)}`,
-      `entry date: ${entryDate}`,
-      `title: ${note.title}`,
-      `categoriesJson: ${JSON.stringify(note.categories)}`,
-      `${note.note}`,
-    ].join("\r\n");
-  }
-
-  function calculateFileName(date) {
-    return `${date.getFullYear()}-${getWeekNumber(date)}.txt`;
-  }
-
-  function appendData(document, data) {
-    return [document, separator, data].filter(Boolean).join("\r\n");
-  }
 
   this.createNote = function (note) {
     const entryDate = new Date();
 
     return [
+      (x) => ({ ...x, id: createNumericalId(entryDate) }),
       (x) => ({
         path: calculateFileName(entryDate),
         formattedNote: formatNote(entryDate, x),
@@ -60,6 +77,6 @@ export default function NoteAdministration(communicator) {
         updatedContent: appendData(x.decodedContent, x.formattedNote),
       }),
       communicator.sendData,
-    ].reduce(this.reducer, note);
+    ].reduce(this.reducer || self.reducer, note);
   };
 }
