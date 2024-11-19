@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import { reducer } from "./Reducer";
 import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
-export function createNoteHeadlineDisplay(note) {
+function createNoteHeadlineDisplay(note) {
   console.log(note);
   return (
-    <section>
+    <section key={note.id}>
       <h2>{note.title}</h2>
       <div>
         <div>{note.date}</div>
@@ -28,7 +28,7 @@ export default function NotesDashboard({ noteAdministrator }) {
   useEffect(() => {
     noteAdministrator
       .getNotes(criteria)
-      .map((p) => p.then((x) => updateNotes([...notes, x])));
+      .then((x) => updateNotes([...notes, ...x]));
   }, []);
 
   return <div>{notes.map(createNoteHeadlineDisplay)}</div>;

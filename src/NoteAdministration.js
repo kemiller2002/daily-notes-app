@@ -31,12 +31,13 @@ function appendData(document, data) {
   return [document, separator, data].filter(Boolean).join("\r\n");
 }
 
-/* Error here */
 function processNotesFile(path) {
   return [
     this.communicator.getFileOrDefault,
     (x) => x.decodedContent,
     (x) => x.split(separator),
+    (x) => x.map((y) => y.trim()),
+    (x) => x.filter(Boolean),
     (x) => x.map((y) => deserializeNote(y)),
   ].reduce(this.reducer, path);
 }
@@ -54,7 +55,7 @@ export default function NoteAdministration(communicator) {
   this.getNotes = function ({ categories, yearsAndMonths }) {
     const monthFiles = yearsAndMonths.map((x) => calculateFileName(x));
 
-    return monthFiles.map(bProcessNotesFile);
+    return Promise.all(monthFiles.map(bProcessNotesFile)).then((x) => x.flat());
   };
 
   this.createNote = function (note) {
