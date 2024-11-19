@@ -5,7 +5,6 @@ import { reducer } from "./Reducer";
 import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
 function createNoteHeadlineDisplay(note) {
-  console.log(note);
   return (
     <section key={note.id}>
       <h2>{note.title}</h2>
