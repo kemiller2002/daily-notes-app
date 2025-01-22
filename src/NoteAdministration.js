@@ -1,9 +1,9 @@
 import { createRailReducerFunction, reducer } from "./Reducer";
 
 import { logToConsole } from "./Logging";
-import { LoginTwoTone } from "@mui/icons-material";
+import { Http, LoginTwoTone, ThreeSixty } from "@mui/icons-material";
 
-import { createNumericalId } from "./Generators";
+import { createTimeStampId, getDateFromTimeStampId } from "./Generators";
 
 import { createNoteStructure, deserializeNote, serializeNote } from "./Note";
 
@@ -24,7 +24,7 @@ function formatNote(entryDate, note) {
 }
 
 function calculateFileName(date) {
-  return `${date.getFullYear()}-${date.getMonth()}.txt`;
+  return `${date.getFullYear()}-${date.getMonth() + 1}.txt`;
 }
 
 function appendData(document, data) {
@@ -34,7 +34,7 @@ function appendData(document, data) {
 function processNotesFile(path) {
   return [
     this.communicator.getFileOrDefault,
-    (x) => x.decodedContent,
+    (x) => x.decodedContent || "",
     (x) => x.split(separator),
     (x) => x.map((y) => y.trim()),
     (x) => x.filter(Boolean),
@@ -53,16 +53,24 @@ export default function NoteAdministration(communicator) {
   });
 
   this.getNotes = function ({ categories, yearsAndMonths }) {
-    const monthFiles = yearsAndMonths.map((x) => calculateFileName(x));
+    const monthFiles = (yearsAndMonths || []).map((x) => calculateFileName(x));
 
     return Promise.all(monthFiles.map(bProcessNotesFile)).then((x) => x.flat());
+  };
+
+  this.getNote = function ({ id }) {
+    const entryDate = getDateFromTimeStampId(id);
+
+    return this.getNotes({ yearsAndMonths: [entryDate] }).then((x) =>
+      x.find((y) => y.id === id)
+    );
   };
 
   this.createNote = function (note) {
     const entryDate = new Date();
 
     return [
-      (x) => ({ ...x, id: createNumericalId(entryDate) }),
+      (x) => ({ ...x, id: createTimeStampId(entryDate) }),
       (x) => ({
         path: calculateFileName(entryDate),
         formattedNote: formatNote(entryDate, x),

@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import { useState, useEffect } from "react";
 import { reducer, createRailReducerFunction } from "./Reducer";
 import { logToConsole } from "./Logging";
+import Markdown from "react-markdown";
 
 function administrateNote(noteAdministrator, clearFields, notify, note) {
   const failure = () => {
@@ -46,7 +47,7 @@ function NoteAdministrationDisplay({
       .then(updateCategories);
   };
 
-  const blankNote = { followUpDate: "" };
+  const blankNote = { followUpDate: "", title: "", categories: [], note: "" };
   const [noteInformation, updateNote] = useState(blankNote);
 
   const clearFields = () => {
@@ -108,6 +109,13 @@ function NoteAdministrationDisplay({
               />
             </InputLabel>
           </div>
+          <TextField
+            name="title"
+            label="Title"
+            onChange={handleInputChange}
+            className="title"
+            value={noteInformation.title || ""}
+          ></TextField>
           <Autocomplete
             key="categorySelect"
             multiple
@@ -125,13 +133,7 @@ function NoteAdministrationDisplay({
             )}
             name="selectCategory"
           />
-          <TextField
-            name="title"
-            label="Title"
-            onChange={handleInputChange}
-            className="title"
-            value={noteInformation.title || ""}
-          ></TextField>
+
           <div className="note-text-container">
             <TextArea
               className="note"
@@ -141,6 +143,9 @@ function NoteAdministrationDisplay({
               value={noteInformation.note || ""}
             ></TextArea>
             <Button type="submit">Save</Button>
+          </div>
+          <div>
+            <Markdown remarkPlugins={[]}>{noteInformation.note}</Markdown>
           </div>
         </form>
       </section>

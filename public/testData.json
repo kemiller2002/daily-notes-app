@@ -1,0 +1,61 @@
+[
+  {
+    "note": "notes \nnotes\nnotes",
+    "id": "1731615122368",
+    "date": "Thu Nov 14 2024 15:12:02 GMT-0500 (Eastern Standard Time)",
+    "title": "test title",
+    "followup": "Thu Nov 14 2024 15:12:02 GMT-0500 (Eastern Standard Time)",
+    "categories": [
+      {
+        "id": 1731443010088,
+        "enabled": true,
+        "name": "Category 1",
+        "categories": ["Person"],
+        "creationDate": "2024-11-12T20:23:30.088Z"
+      },
+      {
+        "id": 45648,
+        "enabled": true,
+        "name": "Category 2",
+        "categories": ["Person"],
+        "creationDate": "2024-11-12T20:23:30.088Z"
+      }
+    ]
+  },
+  {
+    "note": "dfasfasdfasdfasdf",
+    "id": "1732047046401",
+    "date": "Tue Nov 19 2024 15:10:46 GMT-0500 (Eastern Standard Time)",
+    "title": "undefined",
+    "categories": []
+  },
+  {
+    "note": "asdfasdfasdfasdf\nasdf\nasdf\nasdf\n## asdf\n# asdf",
+    "id": "1732047126757",
+    "date": "Tue Nov 19 2024 15:12:06 GMT-0500 (Eastern Standard Time)",
+    "title": "Follow up on email",
+    "categories": [
+      {
+        "id": 1731443010088,
+        "enabled": true,
+        "name": "Category 1",
+        "categories": ["Person"],
+        "creationDate": "2024-11-12T20:23:30.088Z"
+      }
+    ]
+  },
+  {
+    "note": "asdfasdf\nasdfasdfasdfadsfasdflkajsdflkjasdlfkjlakjlkjasdfasdfasdfasdfasdf\nasdfasdfdsaf\nasdfasdf\nasdfasdfasdfsadf",
+    "id": "1732050405407",
+    "date": "Tue Nov 19 2024 16:06:45 GMT-0500 (Eastern Standard Time)",
+    "title": "Second Title around email",
+    "categories": []
+  },
+  {
+    "note": "test",
+    "id": "1732051607773",
+    "date": "Tue Nov 19 2024 16:26:47 GMT-0500 (Eastern Standard Time)",
+    "title": "",
+    "categories": []
+  }
+]

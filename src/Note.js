@@ -6,7 +6,7 @@ function createNoteStructure(id, date, title, categories, note) {
     id,
     date,
     title,
-    categoriesJSON: JSON.stringify(categories),
+    categoriesJSON: JSON.stringify(categories || []),
     note,
   };
 }
@@ -43,9 +43,10 @@ function converter(noteData) {
 
     return {
       ...s,
-      [keyName]: convertFromJSON
-        ? JSON.parse(propertyData)
-        : propertyData.join("\n"),
+      [keyName]:
+        convertFromJSON && propertyData
+          ? JSON.parse(propertyData[0] === "undefined" ? "[]" : propertyData)
+          : propertyData.join("\n"),
     };
   }, {});
 }

@@ -1,0 +1,67 @@
+.note-summary-container {
+  width: 250px;
+  overflow-wrap: break-word;
+  margin: 0.2em;
+  overflow: hidden;
+  padding: 0;
+  text-decoration: inherit;
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+section.notes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+h2.title {
+  margin: 0em;
+  font-size: 1em;
+  margin: 0.2em;
+  background-color: lightgrey;
+  padding: 0.2em;
+  text-align: center;
+}
+
+.details {
+  margin: 0em 0.7em 0em 0.7em;
+}
+
+.dates {
+  display: flex;
+  flex-direction: row;
+}
+
+.dates > div {
+  flex-grow: 2;
+}
+
+.entry {
+  text-align: left;
+}
+
+.dashboard-followup {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.categories {
+  display: flex;
+}
+
+span.category {
+  background-color: lightgray;
+  border-radius: 1em;
+  padding: 0.2em 0.5em;
+  display: block;
+}
+
+.category ~ .category {
+  margin-left: 0.2em;
+}

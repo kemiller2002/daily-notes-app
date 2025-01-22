@@ -38,6 +38,7 @@ export default function Header({ globalClickEventName }) {
         />
         <div className="menuItems">
           <Link to="/">Dashboard</Link>
+          <Link to="/note">Notes</Link>
           <Link to="/follow-up">Follow Up</Link>
           <Link to="/categories">Categories</Link>
           <Link to="administration">Administration</Link>

@@ -4,7 +4,7 @@ import { getWeekNumber } from "./DateFunctions";
 import { logToConsole } from "./Logging";
 import { LoginTwoTone } from "@mui/icons-material";
 
-import { createNumericalId } from "./Generators";
+import { createTimeStampId } from "./Generators";
 
 const railSystem = createRailReducerFunction(logToConsole);
 
@@ -54,7 +54,7 @@ export default function CategoryAdministration(communicator) {
 
   this.saveCategory = function (category) {
     const creationDate = new Date();
-    const id = createNumericalId(creationDate);
+    const id = createTimeStampId(creationDate);
 
     return [
       (x) => ({ id, ...x, creationDate }),

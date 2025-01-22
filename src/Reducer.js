@@ -11,7 +11,7 @@ function onBoard(data) {
 
 function createRailReducerFunction(failureActionMessageHandler) {
   const errors = [];
-  const success = null;
+  let success = null;
 
   function railSystem(state, currentStep, currentIndex, arr) {
     const currentState = (state || {}).isRail ? state : onBoard(state);

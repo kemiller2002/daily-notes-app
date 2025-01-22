@@ -1,4 +1,5 @@
 import { Octokit, App } from "octokit";
+import { reducer } from "./Reducer";
 
 export default function Communicator(localStorage) {
   const repoAccess = {
@@ -20,23 +21,49 @@ export default function Communicator(localStorage) {
 
   const octokit = (token) => new Octokit({ auth: token });
 
+  const cachedFiles = {};
+
+  const defaultExpirationInSeconds = 300;
+
+  function getCachedFile(path) {
+    return [
+      (p) => cachedFiles[p],
+      (f) => (f && f.expiration > new Date() ? f.data : undefined),
+    ].reduce(reducer, path);
+  }
+
+  function clearCacheItem(path) {
+    cachedFiles[path] = undefined;
+  }
+
   function getFile(path) {
     const octo = octokit(repoAccess.token);
 
-    return octo.rest.repos
-      .getContent({
-        owner: repoAccess.owner,
-        repo: repoAccess.repo,
-        path,
-      })
-      .then((result) => {
-        const content = atob(result.data.content);
+    return (
+      getCachedFile(path) ||
+      octo.rest.repos
+        .getContent({
+          owner: repoAccess.owner,
+          repo: repoAccess.repo,
+          path,
+        })
+        .then((result) => {
+          const expiration = new Date();
+          expiration.setSeconds(
+            expiration.getSeconds() + defaultExpirationInSeconds
+          );
 
-        return { ...result.data, decodedContent: content };
-      })
-      .catch((x) => {
-        console.log(x);
-      });
+          const content = atob(result.data.content);
+          const data = { ...result.data, decodedContent: content };
+
+          cachedFiles[path] = { data, expiration };
+
+          return data;
+        })
+        .catch((x) => {
+          console.log(x);
+        })
+    );
   }
 
   const getData = function (path) {
@@ -51,6 +78,7 @@ export default function Communicator(localStorage) {
   };
 
   this.sendData = function ({ path, updatedContent, sha }) {
+    clearCacheItem(path);
     const user = {
       name: repoAccess.name,
       email: repoAccess.email,

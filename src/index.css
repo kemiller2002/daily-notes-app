@@ -225,3 +225,8 @@ div.menuItems > a {
 form.login > * ~ * {
   margin-top: 0.5em !important;
 }
+
+.note-text-display {
+  border: thin solid black;
+  padding: 0.2em;
+}

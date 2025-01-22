@@ -21,6 +21,8 @@ import AdministrationDisplay from "./AdministrationDisplay";
 import FollowUpDisplay from "./FollowUpDisplay";
 import NotesDashboard from "./NotesDashboard";
 
+import NoteDetailsDisplay from "./NoteDetailsDisplay";
+
 function App() {
   const localDatastore = new LocalDatastore();
 
@@ -87,11 +89,20 @@ function App() {
                 element={<FollowUpDisplay></FollowUpDisplay>}
               ></Route>
               <Route
-                path="notes"
+                path="note"
                 element={
                   <NotesDashboard
                     noteAdministrator={noteAdministrator}
+                    categoryAdministrator={categoryAdministrator}
                   ></NotesDashboard>
+                }
+              ></Route>
+              <Route
+                path="note/:id"
+                element={
+                  <NoteDetailsDisplay
+                    noteAdministrator={noteAdministrator}
+                  ></NoteDetailsDisplay>
                 }
               ></Route>
             </Route>
