@@ -4,10 +4,15 @@ import { TextField } from "@mui/material";
 import { useState } from "react";
 
 export function LoginDisplay({ localDatastore }) {
+  const dataStoreLoginKey = localDatastore.dataStoreLoginKey;
+
   const handler = {
     get(target, prop, receiver) {
+      const loginInformation =
+        localDatastore.getItem(dataStoreLoginKey).value || {};
+
       if (typeof prop === "string" && !target[prop]) {
-        target[prop] = localDatastore.getItem(prop).value || "";
+        target[prop] = loginInformation[prop] || "";
       }
 
       return target[prop];
@@ -27,9 +32,15 @@ export function LoginDisplay({ localDatastore }) {
 
   function saveItems(e) {
     e.preventDefault();
+    /*
+    console.log(storedData);
+
     Object.keys(storedData)
       .map((key) => ({ key, value: storedData[key] }))
       .forEach(localDatastore.setItem);
+      */
+
+    localDatastore.setItem({ key: dataStoreLoginKey, value: storedData });
   }
 
   return (
@@ -67,6 +78,13 @@ export function LoginDisplay({ localDatastore }) {
             onChange={updateState}
           />
           <TextField
+            id="descriptor"
+            name="descriptor"
+            value={storedData.descriptor}
+            label="Notes Data Description"
+            onChange={updateState}
+          />
+          <TextField
             id="email"
             name="email"
             value={storedData.email}
@@ -74,8 +92,8 @@ export function LoginDisplay({ localDatastore }) {
             onChange={updateState}
           />
           <TextField
-            id="pat"
-            name="pat"
+            id="token"
+            name="token"
             value={storedData.token}
             label="Personal Access Token"
             onChange={updateState}

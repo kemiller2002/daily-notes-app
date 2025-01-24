@@ -2,13 +2,19 @@ import { Octokit, App } from "octokit";
 import { reducer } from "./Reducer";
 
 export default function Communicator(localStorage) {
+  const localDatastore = localStorage.getItem(
+    localStorage.dataStoreLoginKey
+  ).value;
+
   const repoAccess = {
-    token: localStorage.getItem("token").value,
-    repo: localStorage.getItem("repo").value,
-    name: localStorage.getItem("name").value,
-    email: localStorage.getItem("email").value,
-    owner: localStorage.getItem("owner").value,
+    token: localDatastore.token,
+    repo: localDatastore.repo,
+    name: localDatastore.name,
+    email: localDatastore.email,
+    owner: localDatastore.owner,
   };
+
+  console.log(repoAccess);
 
   function updateLoginInformation(information) {
     try {
