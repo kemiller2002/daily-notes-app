@@ -32,13 +32,6 @@ export function LoginDisplay({ localDatastore }) {
 
   function saveItems(e) {
     e.preventDefault();
-    /*
-    console.log(storedData);
-
-    Object.keys(storedData)
-      .map((key) => ({ key, value: storedData[key] }))
-      .forEach(localDatastore.setItem);
-      */
 
     localDatastore.setItem({ key: dataStoreLoginKey, value: storedData });
   }

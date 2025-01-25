@@ -14,8 +14,6 @@ export default function Communicator(localStorage) {
     owner: localDatastore.owner,
   };
 
-  console.log(repoAccess);
-
   function updateLoginInformation(information) {
     try {
       repoAccess = information;

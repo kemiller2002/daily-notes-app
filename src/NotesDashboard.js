@@ -24,11 +24,7 @@ function makeCategoryEntry(category) {
 
 function createNoteHeadlineDisplay(note) {
   return (
-    <Link
-      to={"/note/" + note.id}
-      key={note.id}
-      className="note-summary-container"
-    >
+    <Link to={note.id} key={note.id} className="note-summary-container">
       <h2 className="title">{note.title}</h2>
       <div className="details">
         <div className="dates">
