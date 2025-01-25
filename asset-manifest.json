@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/daily-notes-app/static/css/main.59c25103.css",
-    "main.js": "/daily-notes-app/static/js/main.3201e9e3.js",
+    "main.js": "/daily-notes-app/static/js/main.10e7d858.js",
     "static/js/453.30506a87.chunk.js": "/daily-notes-app/static/js/453.30506a87.chunk.js",
     "static/media/logo.svg": "/daily-notes-app/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/daily-notes-app/index.html",
     "main.59c25103.css.map": "/daily-notes-app/static/css/main.59c25103.css.map",
-    "main.3201e9e3.js.map": "/daily-notes-app/static/js/main.3201e9e3.js.map",
+    "main.10e7d858.js.map": "/daily-notes-app/static/js/main.10e7d858.js.map",
     "453.30506a87.chunk.js.map": "/daily-notes-app/static/js/453.30506a87.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.59c25103.css",
-    "static/js/main.3201e9e3.js"
+    "static/js/main.10e7d858.js"
   ]
 }
