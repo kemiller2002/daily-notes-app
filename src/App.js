@@ -26,7 +26,7 @@ import NoteDetailsDisplay from "./NoteDetailsDisplay";
 function App() {
   const localDatastore = new LocalDatastore();
 
-  const communicator = new Communicator(localDatastore);
+  const communicator = new Communicator(localDatastore, (x) => console.log(x));
 
   const categoryAdministrator = new CategoryAdministration(communicator);
 

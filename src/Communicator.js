@@ -1,10 +1,9 @@
 import { Octokit, App } from "octokit";
 import { reducer } from "./Reducer";
 
-export default function Communicator(localStorage) {
-  const localDatastore = localStorage.getItem(
-    localStorage.dataStoreLoginKey
-  ).value;
+export default function Communicator(localStorage, notify) {
+  const localDatastore =
+    localStorage.getItem(localStorage.dataStoreLoginKey).value || {};
 
   const repoAccess = {
     token: localDatastore.token,
@@ -14,6 +13,12 @@ export default function Communicator(localStorage) {
     owner: localDatastore.owner,
   };
 
+  const octokit = (token) => new Octokit({ auth: token });
+
+  const cachedFiles = {};
+
+  const defaultExpirationInSeconds = 300;
+
   function updateLoginInformation(information) {
     try {
       repoAccess = information;
@@ -22,12 +27,6 @@ export default function Communicator(localStorage) {
     } catch {}
     return false;
   }
-
-  const octokit = (token) => new Octokit({ auth: token });
-
-  const cachedFiles = {};
-
-  const defaultExpirationInSeconds = 300;
 
   function getCachedFile(path) {
     return [
@@ -65,7 +64,10 @@ export default function Communicator(localStorage) {
           return data;
         })
         .catch((x) => {
-          console.log(x);
+          notify(x);
+          notify(
+            "If the result is a 404, this could is possibly that the auth token is not present or expired."
+          );
         })
     );
   }

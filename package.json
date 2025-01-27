@@ -50,7 +50,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "gh-pages": "^6.3.0",
+    "install": "^0.13.0",
+    "npm": "^11.0.0",
     "webpack": "^5.95.0",
     "webpack-dev-server": "^5.1.0"
   }
